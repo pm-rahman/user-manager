@@ -10,18 +10,39 @@ const createUser = async (req: Request, res: Response) => {
             message: "User Created Successfully!",
             data: result
         })
-    } catch (error:any) {
+    } catch (error: any) {
         res.json({
             success: false,
             message: "Failed to create User",
-            error:{
-                status:404,
-                description:error?.message||error,
+            error: {
+                status: 404,
+                description: error?.message || error,
+            }
+        })
+    }
+}
+
+const getAllUser = async (req: Request, res: Response) => {
+    try {
+        const result = await userServices.getAllUserIntoDB();
+        res.json({
+            success: true,
+            message: "Users fetched successfully!",
+            data: result
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            message: "Failed to create User",
+            error: {
+                status: 404,
+                description: error || "User not found",
             }
         })
     }
 }
 
 export const userController = {
-    createUser
+    createUser,
+    getAllUser
 }

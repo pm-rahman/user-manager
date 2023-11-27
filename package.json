@@ -8,7 +8,7 @@
     "start:dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "eslint-fix": "npx eslint init --fix"
+    "eslint-fix": "npx eslint --fix"
   },
   "author": "",
   "license": "ISC",
