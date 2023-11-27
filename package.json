@@ -8,7 +8,7 @@
     "start:dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "eslint-fix":"npx eslint init --fix"
+    "eslint-fix": "npx eslint init --fix"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +26,7 @@
     "express": "^4.18.2",
     "mongoose": "^8.0.1",
     "ts-node-dev": "^2.0.0",
-    "vercel": "^32.5.6"
+    "vercel": "^32.5.6",
+    "zod": "^3.22.4"
   }
 }
