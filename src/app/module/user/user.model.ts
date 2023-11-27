@@ -21,9 +21,9 @@ const address = new Schema<TAddress>({
     country: String
 });
 const orders = new Schema<TOrders>({
-    productName: String,
-    price: Number,
-    quantity: String
+    productName: {type:String,required:[true,"Product Name is Required"]},
+    price: {type:Number,required:[true,"Product price is Required"]},
+    quantity: {type:String,required:[true,"Product price is Required"]},
 });
 
 const userSchema = new Schema<TUser>({

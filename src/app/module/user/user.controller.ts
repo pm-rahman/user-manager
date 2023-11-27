@@ -33,7 +33,28 @@ const getAllUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.json({
             success: false,
-            message: "Failed to create User",
+            message: "Failed to fetch Users",
+            error: {
+                status: 404,
+                description: error || "Users not found",
+            }
+        })
+    }
+}
+const getSingleUser=async(req:Request,res:Response)=>{
+    try{
+        const {userId}= req.params
+        // TODO: password will be show hashed to response
+        const result = await userServices.getSingleUserIntoDB(userId);
+        res.json({
+            success:true,
+            message:"Failed to fetch user",
+            data:result,
+        })
+    }catch(error){
+        res.json({
+            success: false,
+            message: "Failed to fetch User",
             error: {
                 status: 404,
                 description: error || "User not found",
@@ -44,5 +65,6 @@ const getAllUser = async (req: Request, res: Response) => {
 
 export const userController = {
     createUser,
-    getAllUser
+    getAllUser,
+    getSingleUser
 }
