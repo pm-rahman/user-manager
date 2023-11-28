@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.services";
+import userValidationSchema from "./user.validation";
 
 // create user
 const createUser = async (req: Request, res: Response) => {
     try {
         const user = req.body;
-        const result = await userServices.createUserIntoDB(user);
+        // data validation with zod
+        const validatedUser=userValidationSchema.parse(user);
+        const result = await userServices.createUserIntoDB(validatedUser);
         res.json({
             success: true,
             message: "User Created Successfully!",
@@ -70,7 +73,9 @@ const updateUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const user = req.body;
-        const result = await userServices.updateUserIntoDB(userId, user);
+        // validation with zod
+        const validateUser= userValidationSchema.parse(user);
+        const result = await userServices.updateUserIntoDB(userId, validateUser);
         if (result.modifiedCount === 0) {
             res.json({
                 success: false,
