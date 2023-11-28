@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
 import { TUser, TFullName, TOrders, TAddress } from "./user.interface";
+import bcrypt from "bcrypt"
+import config from "../../config";
 
 const fullName = new Schema<TFullName>({
     firstName: {
@@ -21,9 +23,9 @@ const address = new Schema<TAddress>({
     country: String
 });
 const orders = new Schema<TOrders>({
-    productName: {type:String,required:[true,"Product Name is Required"]},
-    price: {type:Number,required:[true,"Product price is Required"]},
-    quantity: {type:String,required:[true,"Product price is Required"]},
+    productName: { type: String, required: [true, "Product Name is Required"] },
+    price: { type: Number, required: [true, "Product price is Required"] },
+    quantity: { type: String, required: [true, "Product price is Required"] },
 });
 
 const userSchema = new Schema<TUser>({
@@ -60,5 +62,15 @@ const userSchema = new Schema<TUser>({
     address: { type: address, required: [true, "Address is Required"] },
     orders: [orders]
 });
+
+userSchema.pre('save', async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_code)
+    )
+    next();
+})
 
 export const User = model('User', userSchema)

@@ -83,11 +83,23 @@ const updateUser = async (req: Request, res: Response) => {
             })
         }
         else {
-            res.json({
-                success: true,
-                message: "User updated successfully!",
-                data: result
-            })
+            if (result.modifiedCount === 0) {
+                res.json({
+                    success: false,
+                    message: "User not Updated",
+                    error: {
+                        code: 404,
+                        description: "User not Updated!"
+                    }
+                })
+            }
+            else {
+                res.json({
+                    success: true,
+                    message: "User updated successfully!",
+                    data: result
+                })
+            }
         }
 
     } catch (error) {

@@ -21,7 +21,7 @@ const getSingleUserIntoDB = async (userId: string) => {
 }
 const updateUserIntoDB = async (userId: string, user: TUser) => {
     const filter = { userId }
-    const result = await User.updateOne(filter, {
+    const updatedDoc={
         username: user.username,
         fullName: user.fullName,
         password: user.password,
@@ -31,8 +31,8 @@ const updateUserIntoDB = async (userId: string, user: TUser) => {
         hobbies: user.hobbies,
         address: user.address,
         orders: user.orders
-    });
-    // const result = await User.updateOne(filter, update);
+    }
+    const result = await User.updateOne(filter,updatedDoc );
     return result;
 }
 
