@@ -145,11 +145,33 @@ const ordersUpdate = async (req: Request, res: Response) => {
     }
 }
 
+const getUserOrders=async(req:Request,res:Response)=>{
+    try{
+        const {userId}=req.params;
+        const result = await userServices.getUserOrdersIntoDB(userId);
+        res.json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: result
+        })
+    }catch(error){
+        res.json({
+            success: false,
+            message: "Orders not fetched",
+            error: {
+                code: 404,
+                description: error|| "Orders not fetched!"
+            }
+        })
+    }
+}
+
 export const userController = {
-    createUser,
+    getUserOrders,
     getAllUser,
     getSingleUser,
+    createUser,
     updateUser,
-    deleteUser,
-    ordersUpdate
+    ordersUpdate,
+    deleteUser
 }

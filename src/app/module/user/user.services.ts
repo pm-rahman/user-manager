@@ -65,13 +65,19 @@ const ordersUpdateIntoDB = async (userId: string, order: TOrders) => {
     } else throw new Error("User is not found!")
 }
 
-
+const getUserOrdersIntoDB = async (userId: string) => {
+    if (await User.isUserExists(userId)) {
+        const result = await User.findOne({ userId }, { orders: 1 })
+        return result;
+    } else throw new Error("User is not found!")
+}
 
 export const userServices = {
-    createUserIntoDB,
     getAllUserIntoDB,
+    getUserOrdersIntoDB,
     getSingleUserIntoDB,
+    createUserIntoDB,
     updateUserIntoDB,
+    ordersUpdateIntoDB,
     deleteUserIntoDB,
-    ordersUpdateIntoDB
 }
