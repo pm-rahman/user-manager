@@ -1,11 +1,11 @@
 ## student management project
 
 ### Project run commend
-git clone repository link (download git repository)
-npm install (locally install)
-npm run start:dev (locally run)
-npm run build (build)
-npm run start:prod (production run)
+- git clone repository link (download git repository)
+- npm install (locally install)
+- npm run start:dev (locally run)
+- npm run build (build)
+- npm run start:prod (production run)
 
 ### .env file
 - PORT=5000
