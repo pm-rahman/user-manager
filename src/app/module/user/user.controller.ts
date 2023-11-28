@@ -7,7 +7,7 @@ const createUser = async (req: Request, res: Response) => {
     try {
         const user = req.body;
         // data validation with zod
-        const validatedUser=userValidationSchema.parse(user);
+        const validatedUser = userValidationSchema.parse(user);
         const result = await userServices.createUserIntoDB(validatedUser);
         res.json({
             success: true,
@@ -74,7 +74,7 @@ const updateUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
         const user = req.body;
         // validation with zod
-        const validateUser= userValidationSchema.parse(user);
+        const validateUser = userValidationSchema.parse(user);
         const result = await userServices.updateUserIntoDB(userId, validateUser);
         if (result.modifiedCount === 0) {
             res.json({
