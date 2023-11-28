@@ -139,28 +139,49 @@ const ordersUpdate = async (req: Request, res: Response) => {
             message: "Orders not updated",
             error: {
                 code: 404,
-                description: error|| "Orders not updated"
+                description: error || "Orders not updated"
             }
         })
     }
 }
 
-const getUserOrders=async(req:Request,res:Response)=>{
-    try{
-        const {userId}=req.params;
+const getUserOrders = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
         const result = await userServices.getUserOrdersIntoDB(userId);
         res.json({
             success: true,
             message: "Order fetched successfully!",
             data: result
         })
-    }catch(error){
+    } catch (error) {
         res.json({
             success: false,
             message: "Orders not fetched",
             error: {
                 code: 404,
-                description: error|| "Orders not fetched!"
+                description: error || "Orders not fetched!"
+            }
+        })
+    }
+}
+
+const getUserTotalOrders = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await userServices.getUserTotalOrdersIntoDB(userId);
+        res.json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: result
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            message: "Orders not fetched",
+            error: {
+                code: 404,
+                description: error || "Orders not fetched!"
             }
         })
     }
@@ -170,6 +191,7 @@ export const userController = {
     getUserOrders,
     getAllUser,
     getSingleUser,
+    getUserTotalOrders,
     createUser,
     updateUser,
     ordersUpdate,
