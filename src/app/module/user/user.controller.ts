@@ -48,7 +48,6 @@ const getAllUser = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params
-        // TODO: password will be show hashed to response
         const result = await userServices.getSingleUserIntoDB(userId);
         res.json({
             success: true,
@@ -61,7 +60,7 @@ const getSingleUser = async (req: Request, res: Response) => {
             message: "User not found",
             error: {
                 status: 404,
-                description: error || "User not found!",
+                description: "User not found!",
             }
         })
     }
@@ -72,7 +71,7 @@ const updateUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
         const user = req.body;
         const result = await userServices.updateUserIntoDB(userId, user);
-        if (!result.matchedCount) {
+        if (result.modifiedCount === 0) {
             res.json({
                 success: false,
                 message: "User not found",
@@ -83,23 +82,11 @@ const updateUser = async (req: Request, res: Response) => {
             })
         }
         else {
-            if (result.modifiedCount === 0) {
-                res.json({
-                    success: false,
-                    message: "User not Updated",
-                    error: {
-                        code: 404,
-                        description: "User not Updated!"
-                    }
-                })
-            }
-            else {
-                res.json({
-                    success: true,
-                    message: "User updated successfully!",
-                    data: result
-                })
-            }
+            res.json({
+                success: true,
+                message: "User updated successfully!",
+                data: result
+            })
         }
 
     } catch (error) {
@@ -115,9 +102,54 @@ const updateUser = async (req: Request, res: Response) => {
 
 }
 
+const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await userServices.deleteUserIntoDB(userId);
+        res.json({
+            success: true,
+            message: "User deleted successfully!",
+            data: result
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: "User not found!"
+            }
+        })
+    }
+}
+
+const ordersUpdate = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const orders = req.body;
+        const result = await userServices.ordersUpdateIntoDB(userId, orders);
+        res.send({
+            success: true,
+            message: "Order created successfully!",
+            data: result
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            message: "Orders not updated",
+            error: {
+                code: 404,
+                description: error|| "Orders not updated"
+            }
+        })
+    }
+}
+
 export const userController = {
     createUser,
     getAllUser,
     getSingleUser,
-    updateUser
+    updateUser,
+    deleteUser,
+    ordersUpdate
 }

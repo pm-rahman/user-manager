@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TUser, TFullName, TOrders, TAddress } from "./user.interface";
+import { TUser, TFullName, TOrders, TAddress, userMethods } from "./user.interface";
 import bcrypt from "bcrypt"
 import config from "../../config";
 
@@ -25,10 +25,10 @@ const address = new Schema<TAddress>({
 const orders = new Schema<TOrders>({
     productName: { type: String, required: [true, "Product Name is Required"] },
     price: { type: Number, required: [true, "Product price is Required"] },
-    quantity: { type: String, required: [true, "Product price is Required"] },
+    quantity: { type: Number, required: [true, "Product price is Required"] },
 });
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, userMethods>({
     userId: {
         type: String,
         unique: true,
@@ -68,9 +68,13 @@ userSchema.pre('save', async function (next) {
     const user = this;
     user.password = await bcrypt.hash(
         user.password,
-        Number(config.bcrypt_code)
-    )
+        Number(config.bcrypt_code))
     next();
 })
 
-export const User = model('User', userSchema)
+userSchema.statics.isUserExists = async function (id: string) {
+    const existingUser = await User.findOne({ userId: id });
+    return existingUser;
+}
+
+export const User = model<TUser, userMethods>('User', userSchema)

@@ -1,4 +1,4 @@
-import { TUser } from "./user.interface";
+import { TOrders, TUser } from "./user.interface";
 import { User } from "./user.model";
 
 const createUserIntoDB = async (user: TUser) => {
@@ -16,29 +16,62 @@ const getAllUserIntoDB = async () => {
     return result;
 }
 const getSingleUserIntoDB = async (userId: string) => {
-    const result = await User.findOne({ userId });
-    return result;
+    if (await User.isUserExists(userId)) {
+        const result = await User.findOne({ userId });
+        return result;
+    }
+    else {
+        throw new Error("User is not found!");
+    }
 }
 const updateUserIntoDB = async (userId: string, user: TUser) => {
-    const filter = { userId }
-    const updatedDoc={
-        username: user.username,
-        fullName: user.fullName,
-        password: user.password,
-        age: user.age,
-        email: user.email,
-        isActive: user.isActive,
-        hobbies: user.hobbies,
-        address: user.address,
-        orders: user.orders
+    if (await User.isUserExists(userId)) {
+        const { username, fullName, password, age, email, isActive, hobbies, address, orders } = user;
+        const updatedUser = {
+            username,
+            fullName,
+            password,
+            age,
+            email,
+            isActive,
+            hobbies,
+            address,
+            orders
+        }
+        const result = await User.updateOne({ userId }, updatedUser);
+        return result;
     }
-    const result = await User.updateOne(filter,updatedDoc );
-    return result;
+    else {
+        throw new Error("User is not found!");
+    }
 }
+
+const deleteUserIntoDB = async (userId: string) => {
+    if (await User.isUserExists(userId)) {
+        const result = await User.deleteOne({ userId });
+        return result;
+    } else {
+        throw new Error("User is not found!");
+    }
+}
+
+const ordersUpdateIntoDB = async (userId: string, order: TOrders) => {
+    if (await User.isUserExists(userId)) {
+        const updatedOrders = {
+            $push: { orders: order }
+        }
+        const result = await User.updateOne({ userId }, updatedOrders)
+        return result;
+    } else throw new Error("User is not found!")
+}
+
+
 
 export const userServices = {
     createUserIntoDB,
     getAllUserIntoDB,
     getSingleUserIntoDB,
-    updateUserIntoDB
+    updateUserIntoDB,
+    deleteUserIntoDB,
+    ordersUpdateIntoDB
 }
